@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.eclip": "eclip",
+        "*.piv": "Pivot",
+        "*.jd": "assembly",
+        "stdio.h": "c",
+        "stdlib.h": "c"
+    }
+}
