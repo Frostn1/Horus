@@ -1,2 +1,11 @@
-    push 5
-    add @0 2
+    run
+    add @abc 2
+    title add2
+        push 5 hello there
+        push sean
+        -- add @0 2
+    ret @2
+    title main
+    !add
+    add 1 1
+    run add

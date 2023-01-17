@@ -6,29 +6,41 @@ valid_tokens = [
     'div',
     'mul',
     'push',
-    'pop'
+    'pop',
+    'run',
+    'title',
+    'ret'
 ]
 
 
-def is_space(char: chr):
+def is_space(char: chr) -> bool:
     return char == ' ' or char == '\t' or char == '\n'
+
+
+def is_comment(string: str) -> bool:
+    return '--' in string and string.strip().startswith('--')
 
 
 def validate_token(token_str: str) -> tuple[bool, str, dict]:
     if token_str in valid_tokens:
-        return False, '', {'raw': token_str.lower(), '_key': valid_tokens.index(token_str), '_type': 'expression'}
+        return False, '', {'raw': token_str.lower(), '_key': token_str, '_type': 'expression'}
     elif token_str.isnumeric():
-        return False, '', {'raw': token_str, '_key': '', '_type': 'number'}
+        return False, '', {'raw': token_str, '_key': None, '_type': 'number'}
     elif token_str[0] == '@':
         if token_str[1:].isnumeric():
-            return False, '', {'raw': token_str, '_key': token_str[1:], '_type': 'reference'}
+            return False, '', {'raw': token_str, '_key': '@', '_type': 'reference'}
         return True, 'Reference must be followed by a number', dict()
-    return False, '', {'raw': token_str, '_key': '', '_type': 'undefined'}
+    elif token_str[0] == '!':
+        return False, '', {'raw': token_str, '_key': '!', '_type': 'invoker'}
+    return False, '', {'raw': token_str, '_key': None, '_type': 'undefined'}
+
 
 def tokenize(input_str: str, row_index: int) -> list[dict]:
     token_list = []
     current_token = ''
     column_index = 1
+    if is_comment(input_str):
+        return []
     for char in input_str:
         if is_space(char) and current_token:
             error, msg, validated_token = validate_token(current_token)
@@ -61,7 +73,6 @@ def tokenize(input_str: str, row_index: int) -> list[dict]:
                 column_index - len(current_token),
                 input_str
             )
-
         else:
             token_list.append(validated_token | dict(row_index=row_index, column_index=column_index))
     return token_list
