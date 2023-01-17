@@ -20,5 +20,6 @@ def assemble(input_code: list[str]) -> None:
     # stack.dump()
     ast_list: list[Node] = parse(token_list_list)
     visit_ast_list(ast_list, stack)
+    generate(ast_list)
     # stack.dump()
     print(f'[TOTAL TIME] --> {time.time() - start_time}s')

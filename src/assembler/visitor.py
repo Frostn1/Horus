@@ -83,6 +83,8 @@ def traverse_tree(ast: Node, stack: Stack) -> tuple[bool, dict]:
             return False, dict(value=int(ast.data['raw']))
 
 
-def visit_ast_list(ast_list: list[Node], stack: Stack):
+def visit_ast_list(ast_list: list[Node], stack: Stack) -> bool:
     for ast in ast_list:
         traverse_tree(ast, stack)
+    return True
+    # Check for errors
