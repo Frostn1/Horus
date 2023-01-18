@@ -1,5 +1,6 @@
 import time
 
+from src.assembler.generator import generate
 from src.assembler.stack import Stack
 from src.assembler.tokenizer import tokenize
 from src.assembler.parser import parse
@@ -17,9 +18,9 @@ def assemble(input_code: list[str]) -> None:
             continue
         token_list_list.append(token_list_for_line)
         # print(token_list_for_line)
-    # stack.dump()
+    stack.dump()
     ast_list: list[Node] = parse(token_list_list)
     visit_ast_list(ast_list, stack)
-    generate(ast_list)
-    # stack.dump()
+    generate(ast_list, stack)
+    stack.dump()
     print(f'[TOTAL TIME] --> {time.time() - start_time}s')
